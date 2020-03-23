@@ -1,0 +1,63 @@
+name: Docker Build
+
+on:
+  push:
+    branches:
+      - master
+      - a
+      - n
+      - f
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [12.x]
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v1
+      with:
+        node-version: ${{ matrix.node-version }}
+
+    # Setup gcloud CLI
+    - uses: mchirico/gcp-actions@v1
+      with:
+        version: 'latest'
+        service_account_key: ${{ secrets.OWNER }}
+
+    # Configure docker to use the gcloud command-line tool as a credential helper
+    - run: |
+        # Set up docker to authenticate
+        # via gcloud command-line tool.
+        gcloud auth configure-docker
+        gcloud components update --quiet
+
+
+    # Run Docker Image
+    - name: Run Docker Image
+      run: |
+       make
+       make run
+       sleep 7
+       docker ps -a
+       # make logs
+       # curl localhost:3000|grep 'lat'
+
+
+
+
+    # BigQuery
+    - name: Working with BigQuery
+      run: |
+       txt="Cloud build... montco.cwxstat.com"
+       bq query --nouse_legacy_sql 'CREATE TABLE IF NOT EXISTS  `montco911.github.log` (msg string, timeEnter timestamp);'
+       bq query --nouse_legacy_sql  --parameter=MSG:STRING:"${txt}"  'insert into `montco911.github.log` (msg,timeEnter) values (@MSG,CURRENT_TIMESTAMP())'
+
+
+
+
