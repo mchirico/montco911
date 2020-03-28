@@ -1,0 +1,14 @@
+WIP:
+  title: "^WIP:.*"
+
+S:
+  size-below: 10
+M:
+  size-above: 9
+  size-below: 100
+L:
+  size-above: 100
+
+
+Merge:
+  mergeable: true
