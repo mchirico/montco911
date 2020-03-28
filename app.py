@@ -8,7 +8,6 @@ import plotly.express as px
 import streamlit as st
 
 
-@st.cache
 def readTZ():
     url="https://storage.googleapis.com/montco-stats/tzsmall.csv"
     d=requests.get(url,verify=True).content
@@ -62,7 +61,7 @@ st.plotly_chart(fig)
 
 
 
-# Seaborn
+# Plot
 
 t=d[d['timeStamp']>= '2015-01-01']
 t['e']=1
@@ -77,5 +76,23 @@ t = pp
 
 import plotly.express as px
 fig = px.line(t, x="timeStamp", y="EMS: FEVER", title='EMS: FEVER/day',
+   template='plotly_dark')
+st.plotly_chart(fig)
+
+
+
+t=d[d['timeStamp']>= '2015-01-01']
+t['e']=1
+p = pd.pivot_table(t, values='e', index=['timeStamp'], columns=['title'], aggfunc=np.sum)
+pp = p.resample('1d').apply(np.sum).reset_index()
+pp.columns = pp.columns.get_level_values(0)
+
+pp.fillna(0, inplace=True)
+pp.sort_values(by=['timeStamp'], ascending=False, inplace=True)
+
+t = pp
+
+import plotly.express as px
+fig = px.line(t, x="timeStamp", y="EMS: RESPIRATORY EMERGENCY", title='EMS: RESPIRATORY EMERGENCY/day',
    template='plotly_dark')
 st.plotly_chart(fig)
