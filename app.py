@@ -52,6 +52,12 @@ tz['Total']=tz.sum(numeric_only=True, axis=1)
 tz
 
 
+import plotly.express as px
+fig = px.line(tz[1:], x="timeStamp", y="Total", title='EMS: FEVER/5 day',
+   template='plotly_dark')
+st.plotly_chart(fig)
+
+
 
 # Plot
 fig = px.histogram(z, x="timeStamp", y="EMS: FEVER", color="twp",hover_name="twp")

@@ -1,14 +1,16 @@
-WIP:
-  title: "^WIP:.*"
+# Add 'repo' label to any root file changes
+app:
+  - ./app.py
 
-S:
-  size-below: 10
-M:
-  size-above: 9
-  size-below: 100
-L:
-  size-above: 100
+Dockerfile:
+  - ./Dockerfile
 
+requirements:
+  - ./requirements.txt
 
-Merge:
-  mergeable: true
+jupyter:
+  - ./*.ipynb
+
+# Add 'test' label to any change to *.spec.js files within the source dir
+github:
+  - .github/**/*
