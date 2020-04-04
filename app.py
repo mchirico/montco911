@@ -1,7 +1,12 @@
 import requests
+import os, time
 import pandas as pd
 import numpy as np 
 from datetime import datetime
+
+# Need correct timezone for Monto pa
+os.environ['TZ'] = 'US/Eastern'
+time.tzset()
 
 import plotly.express as px
 
@@ -43,7 +48,7 @@ p2 = p2.reset_index()
 pp2 = p2.groupby(['twp', pd.Grouper(key='timeStamp', freq='5d')])['EMS: FEVER'].sum()
 pp2=pp2.reset_index()
 
-z = pp2[(pp2['timeStamp']>= '2020-01-01') & (pp2['EMS: FEVER'] >= 1)]
+z = pp2[(pp2['timeStamp']>= '2019-06-01') & (pp2['EMS: FEVER'] >= 1)]
 zz= pd.pivot_table(z, values='EMS: FEVER', index=['timeStamp'], columns=['twp'], aggfunc=np.sum)
 tz= zz.sort_index(axis=0, level=None, ascending=False).fillna(0)
 tz= tz.reset_index()
