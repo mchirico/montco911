@@ -1,0 +1,10 @@
+# If you get Toml docoder error rm -rf ~/.streamlit
+
+
+stream.montcopa.io is on mce9
+
+heroku login
+git push heroku master
+# Non master branch
+git push heroku n:master
+

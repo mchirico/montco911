@@ -37,6 +37,19 @@ st.title('Sample of most recent calls with fever..')
 e = d[d['title']=='EMS: FEVER']
 e
 
+
+
+## Duplicate Location: Possible Nursing/Rehab
+st.title('3 or more  911 FEVER calls to same location: Likely Nursing/Rehab Center')
+e=d[d['title']=='EMS: FEVER']
+e=e[e['timeStamp']>= '2020-02-01']
+e["ln"] = e['lat'].astype(str) + e['lng']
+# Duplicate locations:
+e = pd.concat(e for _, e in e.groupby("ln") if len(e) > 3)
+e
+
+
+
 st.title('Montco 911 FEVER calls by township per 5 day')
 
 t=d[d['timeStamp']>= '2020-01-01']
